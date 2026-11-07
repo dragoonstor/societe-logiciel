@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="870" viewBox="0 0 680 870" role="img">
+<title>Déroulé d'un sprint du skill societe-logiciel</title>
+<desc>Le besoin du client passe par le Directeur, le PO, le Tech Lead, puis un cadrage en parallèle par Sécurité, QA et DevOps. En mode cadrage on saute directement à la sprint review. En mode implémentation : développement en parallèle, revue, tests QA, boucle de correction de trois tours au plus, puis sprint review et rapport au client.</desc>
+<style>
+text { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+.th { font-size: 14px; font-weight: 600; }
+.ts { font-size: 12px; }
+.gray rect { fill: #F1EFE8; stroke: #5F5E5A; } .gray .th { fill: #2C2C2A; } .gray .ts { fill: #5F5E5A; }
+.purple rect { fill: #EEEDFE; stroke: #534AB7; } .purple .th { fill: #3C3489; } .purple .ts { fill: #534AB7; }
+.teal rect { fill: #E1F5EE; stroke: #0F6E56; } .teal .th { fill: #085041; } .teal .ts { fill: #0F6E56; }
+.arr { stroke: #73726c; stroke-width: 1.5; fill: none; }
+.lbl { fill: #5F5E5A; }
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#73726c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="0" y="0" width="680" height="870" fill="#FFFFFF"/>
+
+<g class="gray"><rect x="230" y="30" width="220" height="44" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="52" text-anchor="middle" dominant-baseline="central">Client : le besoin</text></g>
+<line x1="340" y1="74" x2="340" y2="92" class="arr" marker-end="url(#arrow)"/>
+
+<g class="gray"><rect x="210" y="94" width="260" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="114" text-anchor="middle" dominant-baseline="central">0. Directeur : accueil</text>
+<text class="ts" x="340" y="132" text-anchor="middle" dominant-baseline="central">brief.md</text></g>
+<line x1="340" y1="150" x2="340" y2="168" class="arr" marker-end="url(#arrow)"/>
+
+<g class="purple"><rect x="210" y="170" width="260" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="190" text-anchor="middle" dominant-baseline="central">1. Product Owner</text>
+<text class="ts" x="340" y="208" text-anchor="middle" dominant-baseline="central">backlog.md + choix du mode</text></g>
+<line x1="340" y1="226" x2="340" y2="244" class="arr" marker-end="url(#arrow)"/>
+
+<g class="teal"><rect x="210" y="246" width="260" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="266" text-anchor="middle" dominant-baseline="central">2. Tech Lead / Architecte</text>
+<text class="ts" x="340" y="284" text-anchor="middle" dominant-baseline="central">architecture.md + tasks.md</text></g>
+<line x1="300" y1="302" x2="190" y2="320" class="arr" marker-end="url(#arrow)"/>
+<line x1="340" y1="302" x2="340" y2="320" class="arr" marker-end="url(#arrow)"/>
+<line x1="380" y1="302" x2="490" y2="320" class="arr" marker-end="url(#arrow)"/>
+
+<g class="teal"><rect x="110" y="322" width="140" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="180" y="342" text-anchor="middle" dominant-baseline="central">3. Sécurité</text>
+<text class="ts" x="180" y="360" text-anchor="middle" dominant-baseline="central">menaces</text></g>
+<g class="teal"><rect x="270" y="322" width="140" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="342" text-anchor="middle" dominant-baseline="central">3. QA</text>
+<text class="ts" x="340" y="360" text-anchor="middle" dominant-baseline="central">plan de test</text></g>
+<g class="teal"><rect x="430" y="322" width="140" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="500" y="342" text-anchor="middle" dominant-baseline="central">3. DevOps</text>
+<text class="ts" x="500" y="360" text-anchor="middle" dominant-baseline="central">plan build / CI</text></g>
+
+<line x1="200" y1="378" x2="290" y2="408" class="arr" marker-end="url(#arrow)"/>
+<line x1="340" y1="378" x2="340" y2="408" class="arr" marker-end="url(#arrow)"/>
+<line x1="480" y1="378" x2="390" y2="408" class="arr" marker-end="url(#arrow)"/>
+
+<g class="teal"><rect x="210" y="410" width="260" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="430" text-anchor="middle" dominant-baseline="central">4. Développeurs ×N</text>
+<text class="ts" x="340" y="448" text-anchor="middle" dominant-baseline="central">une tâche chacun, en parallèle</text></g>
+<line x1="340" y1="466" x2="340" y2="484" class="arr" marker-end="url(#arrow)"/>
+
+<g class="teal"><rect x="210" y="486" width="260" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="506" text-anchor="middle" dominant-baseline="central">5. Revue de code</text>
+<text class="ts" x="340" y="524" text-anchor="middle" dominant-baseline="central">Tech Lead + Sécurité</text></g>
+<line x1="340" y1="542" x2="340" y2="560" class="arr" marker-end="url(#arrow)"/>
+
+<g class="teal"><rect x="210" y="562" width="260" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="582" text-anchor="middle" dominant-baseline="central">6. Tests QA</text>
+<text class="ts" x="340" y="600" text-anchor="middle" dominant-baseline="central">contre les critères d'acceptation</text></g>
+<line x1="340" y1="618" x2="340" y2="636" class="arr" marker-end="url(#arrow)"/>
+
+<g class="teal"><rect x="210" y="638" width="260" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="658" text-anchor="middle" dominant-baseline="central">7. Corrections</text>
+<text class="ts" x="340" y="676" text-anchor="middle" dominant-baseline="central">max 3 tours, retour aux devs</text></g>
+<path d="M210 666 L150 666 L150 438 L206 438" class="arr" marker-end="url(#arrow)"/>
+<line x1="340" y1="694" x2="340" y2="712" class="arr" marker-end="url(#arrow)"/>
+
+<g class="purple"><rect x="210" y="714" width="260" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="734" text-anchor="middle" dominant-baseline="central">8. Sprint review (PO)</text>
+<text class="ts" x="340" y="752" text-anchor="middle" dominant-baseline="central">acceptée / partielle / refusée</text></g>
+<line x1="340" y1="770" x2="340" y2="788" class="arr" marker-end="url(#arrow)"/>
+
+<g class="gray"><rect x="210" y="790" width="260" height="44" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="812" text-anchor="middle" dominant-baseline="central">Client : rapport de sprint</text></g>
+
+<path d="M570 350 L630 350 L630 742 L474 742" class="arr" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+<text class="ts lbl" x="620" y="556" text-anchor="end">si mode cadrage</text>
+</svg>
