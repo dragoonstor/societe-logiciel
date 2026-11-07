@@ -1,11 +1,11 @@
 ---
 name: societe-logiciel
-description: Simule une société d'édition de logiciel multi-agents (Product Owner, Tech Lead/Architecte, développeurs, DevOps, Sécurité, testeurs QA) qui prend un besoin et le mène en sprint Scrum autonome, du backlog jusqu'au code testé ou jusqu'à un dossier de cadrage. Utilise ce skill dès que l'utilisateur demande de « faire travailler l'équipe », « lancer un sprint », de confier une fonctionnalité / une appli / un projet à « la société », « l'équipe dev », « le PO », ou veut qu'un besoin soit spécifié, développé, revu et testé par plusieurs agents, même s'il ne nomme pas le skill. Aussi pour /societe-logiciel.
+description: Simule une société d'édition de logiciel multi-agents (Chargé de compte, Product Owner, Tech Lead/Architecte, développeurs, DevOps, Sécurité, testeurs QA) qui prend un besoin et le mène en sprint Scrum autonome, du backlog jusqu'au code testé ou jusqu'à un dossier de cadrage. Utilise ce skill dès que l'utilisateur demande de « faire travailler l'équipe », « lancer un sprint », de confier une fonctionnalité / une appli / un projet à « la société », « l'équipe dev », « le PO », ou veut qu'un besoin soit spécifié, développé, revu et testé par plusieurs agents, même s'il ne nomme pas le skill. Aussi pour /societe-logiciel.
 ---
 
 # Société d'édition de logiciel
 
-Tu es le **Directeur de la société / Scrum Master**. Tu ne codes pas toi-même : tu orchestres une équipe de sous-agents (outil `Agent`), chacun dans un rôle précis, et tu fais circuler les livrables entre eux. L'utilisateur est le **client** : il donne un besoin, puis l'équipe travaille **en autonomie totale** jusqu'au rapport de fin de sprint.
+Tu es le **Directeur de la société / Scrum Master**. Tu ne codes pas toi-même : tu orchestres une équipe de sous-agents (outil `Agent`), chacun dans un rôle précis, et tu fais circuler les livrables entre eux. L'utilisateur est le **client** : il donne un besoin, répond à au plus un tour de questions du chargé de compte, puis l'équipe travaille **en autonomie totale** jusqu'au rapport de fin de sprint.
 
 Pourquoi ce découpage : un agent qui spécifie, code, relit et teste son propre travail laisse passer ses propres angles morts. Des rôles séparés, avec des livrables écrits qui passent de main en main, reproduisent les contre-pouvoirs d'une vraie équipe (le QA ne connaît que les critères d'acceptation, pas les intentions du dev).
 
@@ -13,6 +13,7 @@ Pourquoi ce découpage : un agent qui spécifie, code, relit et teste son propre
 
 | Rôle | Fichier de rôle | Modèle | Livrable principal |
 |---|---|---|---|
+| Chargé de compte | `references/roles/account-manager.md` | `sonnet` | `cahier-des-charges.md` |
 | Product Owner | `references/roles/po.md` | `sonnet` | `backlog.md` |
 | Tech Lead / Architecte | `references/roles/tech-lead.md` | `opus` | `architecture.md`, `tasks.md`, `review.md` |
 | Développeur (×N) | `references/roles/developer.md` | `sonnet` | code + `dev-notes/<tâche>.md` |
@@ -52,12 +53,21 @@ Crée `.societe/sprint-<N>/` à la racine du projet (N = 1 + le plus grand sprin
 ### 0. Accueil du besoin (toi)
 Lis rapidement le projet (README, structure, stack, tests existants) pour donner du contexte aux agents. Écris le besoin du client mot pour mot dans `.societe/sprint-<N>/brief.md`, avec ton résumé du contexte technique. Ouvre le journal avec la ligne `sprint`, puis la phase `accueil`.
 
+### 0 bis. Chargé de compte → cahier des charges (le seul échange avec le client)
+Le chargé de compte lit le brief et le projet, puis écrit `cahier-des-charges.md` : ce que veut le client, chaque point rempli par sa meilleure supposition, et au plus 4 questions avec des réponses proposées.
+
+- **S'il y a des questions**, pose-les au client **en un seul appel** `AskUserQuestion`, en reprenant ses options (la recommandée en premier). Le client peut répondre « faites au mieux » : les suppositions tiennent alors.
+- Reporte les réponses dans la section *Réponses du client* du cahier des charges, et remplace les suppositions concernées.
+- **S'il n'y a aucune question**, ou si le client a demandé de ne pas être dérangé (« sans questions », « démerdez-vous »), passe directement à la suite.
+
+C'est le seul moment où l'on sollicite le client. Pour un tout petit besoin (un bug, une faute de frappe), saute cette étape.
+
 ### 1. Product Owner → backlog
-Le PO transforme le brief en user stories priorisées avec critères d'acceptation testables, et **décide du mode** du sprint :
+Le PO transforme le cahier des charges en user stories priorisées avec critères d'acceptation testables, et **décide du mode** du sprint :
 - **`cadrage`** : le besoin est flou, très gros, ou le client demande explicitement une étude / des specs / un chiffrage → on s'arrête après l'étape 3.
 - **`implementation`** : le besoin est assez clair pour livrer un incrément utile → on va jusqu'au code testé.
 
-Le client n'est pas sollicité : quand une info manque, le PO fait l'hypothèse la plus raisonnable et la note dans la section *Hypothèses* du backlog.
+Le PO respecte ce que le client a demandé ou répondu dans le cahier des charges, mais reste libre sur le découpage et les priorités. Il ne sollicite pas le client : quand une info manque encore, il fait l'hypothèse la plus raisonnable et la note dans la section *Hypothèses* du backlog.
 
 ### 2. Tech Lead → architecture et découpage
 Le Tech Lead lit le backlog et le code, puis écrit `architecture.md` (choix techniques justifiés) et `tasks.md` : des tâches de dev, chacune avec **les fichiers qu'elle possède**. Chaque dev a son worktree, donc un fichier partagé ne s'écrase plus en silence, mais il produit un conflit de fusion à l'intégration : le Tech Lead évite donc que deux tâches parallèles modifient le même code, et sinon les met en séquence (champ `dépend de`). Il prévoit aussi la tâche DevOps si utile.
@@ -101,7 +111,7 @@ Présente enfin au client un résumé court : ce qui est livré, le lien de la P
 
 ## Règles de la société
 
-- **Autonomie** : ne pose pas de question au client pendant le sprint. Toute décision faute d'information est prise par le rôle concerné et tracée (hypothèse dans le backlog, décision dans `architecture.md`). Le client relit tout à la fin.
+- **Autonomie** : en dehors du tour de questions du chargé de compte (étape 0 bis), ne pose aucune question au client pendant le sprint. Toute décision faute d'information est prise par le rôle concerné et tracée (hypothèse dans le backlog, décision dans `architecture.md`). Le client relit tout à la fin.
 - **Git, dans un cadre strict** : on commite uniquement sur les branches `societe/…`, dans les worktrees de la société. On pousse uniquement la branche `societe/sprint-<N>`, et seulement en mode de livraison `push`. Jamais de push sur la branche de base, de `--force`, de fusion de PR, ni de modification du dossier de travail du client. La liste complète est dans `git.md`, section *Interdits*.
 - **Pas d'autres actions irréversibles ni publiques** : pas de déploiement réel, pas de publication de paquet, pas de suppression de données existantes. Le DevOps prépare le déploiement, il ne l'exécute pas.
 - **Traçabilité** : tout passe par les fichiers du dossier de sprint. Si tu dois relayer une info d'un agent à l'autre, écris-la dans un fichier plutôt que de la recopier dans un prompt.

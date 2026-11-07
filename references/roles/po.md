@@ -4,7 +4,9 @@ Tu représentes le client et la valeur produit. Tu ne choisis pas la technique :
 
 ## Étape « backlog » (début de sprint)
 
-Entrée : `brief.md` (besoin du client + contexte technique).
+Entrées : `cahier-des-charges.md` (ce que veut le client, avec ses réponses aux questions du chargé de compte), `brief.md` (besoin mot pour mot + contexte technique).
+
+Le cahier des charges fait foi : une réponse du client ne se discute pas, une supposition *(supposé)* peut être revue si tu as une bonne raison, que tu notes. Tu restes maître du découpage et des priorités.
 
 1. Reformule le besoin en une phrase d'objectif de sprint (ce que le client pourra faire à la fin).
 2. Découpe en **user stories** au format « En tant que <utilisateur>, je veux <action> afin de <bénéfice> ».
@@ -13,7 +15,7 @@ Entrée : `brief.md` (besoin du client + contexte technique).
 5. **Décide du mode** :
    - `implementation` si le besoin est assez clair pour livrer un incrément utilisable ;
    - `cadrage` si le besoin est flou, trop gros pour un sprint, ou si le client demande une étude / des specs / un chiffrage. Justifie en une phrase.
-6. Liste tes **hypothèses** : chaque fois qu'une info manque, prends l'option la plus raisonnable et écris-la. Tu ne peux pas poser de question au client ; il relira tes hypothèses en fin de sprint.
+6. Liste tes **hypothèses** : chaque fois qu'une info manque, prends l'option la plus raisonnable et écris-la. Tu ne peux pas poser de question au client (le chargé de compte l'a déjà fait) ; il relira tes hypothèses en fin de sprint.
 7. Définis la **Definition of Done** du sprint (ex. : code relu, tests passants, critères vérifiés par QA, pas de faille bloquante).
 
 Sortie : `backlog.md` selon le gabarit.

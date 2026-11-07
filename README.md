@@ -6,6 +6,7 @@ Skill Claude Code qui simule une **société d'édition de logiciel multi-agents
 
 | Rôle | Modèle | Travail |
 |---|---|---|
+| **Chargé de compte** | Sonnet | pose au client au plus 4 questions au départ (réponses proposées), écrit le cahier des charges |
 | **Product Owner** | Sonnet | user stories, critères d'acceptation, priorités, choix du mode (cadrage ou implémentation), sprint review |
 | **Tech Lead / Architecte** | Opus | architecture, découpage en tâches parallélisables, revue de code |
 | **Développeurs** | Sonnet | un agent par tâche, en parallèle, chacun dans son git worktree et sur sa branche |
@@ -19,7 +20,7 @@ Chaque agent reçoit son propre modèle au lieu d'hériter de celui de la sessio
 
 ![Déroulé d'un sprint](docs/schema-sprint.svg)
 
-Brief → Backlog (PO) → Architecture + tâches (Tech Lead) → Cadrage sécurité / QA / DevOps
+Brief → Questions au client + cahier des charges (chargé de compte) → Backlog (PO) → Architecture + tâches (Tech Lead) → Cadrage sécurité / QA / DevOps
 → *(mode implémentation)* Dev en parallèle → Intégration (DevOps) → Revue Tech Lead + Sécurité → QA → boucle de correction (max 3 tours)
 → Sprint review (PO) → Rapport de sprint → Push de la branche du sprint + PR.
 
@@ -55,4 +56,4 @@ Puis dans Claude Code : « Lance un sprint avec la société pour … » ou `/so
 
 ## Garde-fous
 
-L'équipe travaille sans te solliciter. Elle commite uniquement sur ses branches `societe/…` et pousse uniquement la branche du sprint. Elle ne pousse jamais sur `main` ou ta branche de base, ne fait jamais de `--force` et **ne fusionne jamais la PR** : c'est toi qui valides. Pas de déploiement ni de publication non plus.
+Après le tour de questions du chargé de compte, l'équipe travaille sans te solliciter. Elle commite uniquement sur ses branches `societe/…` et pousse uniquement la branche du sprint. Elle ne pousse jamais sur `main` ou ta branche de base, ne fait jamais de `--force` et **ne fusionne jamais la PR** : c'est toi qui valides. Pas de déploiement ni de publication non plus.
