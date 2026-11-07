@@ -43,10 +43,12 @@ Modifications non commitées du client (hors sprint) : <aucune | liste>
 - <stack, plateforme, délai, données existantes…>
 ## Hors sujet
 - ...
-## Questions pour le client (4 au plus, 0 si tout est clair)
+## Questions pour le client — tour <k> (4 au plus, 0 si tout est clair ; 3 tours au plus)
 1. <question> — options : <A (recommandé)> / <B> / <C>
-## Réponses du client
-<rempli par le Directeur ; « faites au mieux » ou pas de réponse : les suppositions tiennent>
+## Réponses du client — tour <k>
+<rempli par le Directeur ; « faites au mieux » : plus de questions, les suppositions tiennent>
+## Bilan
+clair | flou — <inconnues importantes restantes, s'il y en a>
 ```
 
 ## backlog.md
