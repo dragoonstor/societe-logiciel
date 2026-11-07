@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replay du sprint</title>
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--txt:#1f1e1b;--mut:#6b6a64;--line:#dcdad2;--acc:#d97757;--ok:#1d9e75;--ko:#d14343;
+--po:#7f77dd;--tl:#378add;--dev:#1d9e75;--ops:#ba7517;--sec:#d4537e;--qa:#d85a30;--dir:#888780}
+@media (prefers-color-scheme:dark){:root{--bg:#0e0f11;--card:#16181b;--txt:#ecebe6;--mut:#8f8e88;--line:#2a2d31;--acc:#f0997b}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1100px;margin:0 auto;padding:32px 16px 64px}
+.eyebrow{font:12px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;color:var(--mut);text-transform:uppercase}
+h1{font-size:clamp(28px,5vw,44px);margin:6px 0 4px;letter-spacing:-.02em}
+.obj{color:var(--mut);margin:0 0 24px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:28px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font-size:24px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:20px}
+h2{font-size:14px;margin:0 0 14px;font-weight:600}
+.phases{display:flex;flex-wrap:wrap;gap:6px}
+.ph{font:12px ui-monospace,Menlo,Consolas,monospace;padding:6px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mut)}
+.ph.done{color:var(--txt);border-color:var(--ok)}
+.ph i{font-style:normal;color:var(--mut);margin-left:6px}
+.gantt{position:relative;overflow-x:auto}
+.grid{min-width:640px}
+.row{display:grid;grid-template-columns:220px 1fr;align-items:center;gap:12px;padding:5px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.lbl{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbl small{display:block;color:var(--mut);font:11px ui-monospace,Menlo,Consolas,monospace}
+.track{position:relative;height:22px}
+.bar{position:absolute;top:3px;height:16px;border-radius:4px;min-width:3px;opacity:.9}
+.bar.ko{outline:2px solid var(--ko)}
+.bar.run{background-image:repeating-linear-gradient(45deg,transparent 0 6px,rgba(255,255,255,.35) 6px 12px)}
+.band{position:absolute;top:0;bottom:0;border-left:1px dashed var(--line)}
+.band span{position:absolute;top:-2px;left:4px;font:10px ui-monospace,Menlo,Consolas,monospace;color:var(--mut);white-space:nowrap}
+.axis{display:grid;grid-template-columns:220px 1fr;gap:12px;margin-top:6px;font:11px ui-monospace,Menlo,Consolas,monospace;color:var(--mut)}
+.axis div{display:flex;justify-content:space-between}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:12px;color:var(--mut)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.models{display:flex;flex-wrap:wrap;gap:10px}
+.model{font:13px ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+a{color:var(--acc)}
+.empty{color:var(--mut)}
+@media (max-width:640px){.row,.axis{grid-template-columns:120px 1fr}.grid{min-width:520px}}
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Société logiciel · replay du sprint</div>
+  <h1 id="titre">Sprint</h1>
+  <p class="obj" id="objectif"></p>
+  <div class="kpis" id="kpis"></div>
+  <section class="card"><h2>Phases</h2><div class="phases" id="phases"></div></section>
+  <section class="card"><h2>Qui a travaillé quand</h2><div class="gantt"><div class="grid" id="gantt"></div></div><div class="legend" id="legend"></div></section>
+  <section class="card"><h2>Temps de travail par modèle</h2><div class="models" id="models"></div></section>
+</main>
+<script type="application/x-ndjson" id="journal">
+__JOURNAL__
+</script>
+<script>
+(function(){
+  var LIB={accueil:"accueil",backlog:"backlog",architecture:"archi",cadrage:"cadrage",developpement:"dev",integration:"intégration",revue:"revue",qa:"QA",correction:"correction",review:"sprint review",livraison:"livraison"};
+  function couleur(role){var r=(role||"").toLowerCase();
+    if(r.indexOf("product")>=0||r==="po")return"var(--po)";
+    if(r.indexOf("tech")>=0||r.indexOf("archi")>=0)return"var(--tl)";
+    if(r.indexOf("devops")>=0||r.indexOf("intég")>=0)return"var(--ops)";
+    if(r.indexOf("sécu")>=0||r.indexOf("secu")>=0)return"var(--sec)";
+    if(r.indexOf("qa")>=0||r.indexOf("test")>=0)return"var(--qa)";
+    if(r.indexOf("dév")>=0||r.indexOf("dev")>=0)return"var(--dev)";
+    return"var(--dir)";}
+  function duree(ms){var s=Math.max(0,Math.round(ms/1000));if(s<60)return s+"s";var m=Math.floor(s/60);return m<60?m+"m"+String(s%60).padStart(2,"0"):Math.floor(m/60)+"h"+String(m%60).padStart(2,"0");}
+  function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+
+  var lignes=document.getElementById("journal").textContent.split(/\r?\n/),ev=[];
+  lignes.forEach(function(l){l=l.trim();if(!l||l.charAt(0)!=="{")return;try{var o=JSON.parse(l);o.ms=Date.parse(o.t)||0;ev.push(o);}catch(e){}});
+  if(!ev.length){document.getElementById("titre").textContent="Journal vide";return;}
+  ev.sort(function(a,b){return a.ms-b.ms});
+
+  var s={numero:"?",objectif:"",mode:"implementation",tour:0,pr:""},runs=[],ouverts={},phases=[];
+  ev.forEach(function(e){
+    if(e.type==="sprint"){if(e.numero!=null)s.numero=e.numero;s.objectif=e.objectif||s.objectif;s.mode=e.mode||s.mode;}
+    else if(e.type==="mode")s.mode=e.mode||s.mode;
+    else if(e.type==="tour")s.tour=Math.max(s.tour,e.tour||0);
+    else if(e.type==="livraison")s.pr=e.pr||"local";
+    else if(e.type==="phase")phases.push({phase:e.phase,debut:e.ms});
+    else if(e.type==="agent"&&e.id){
+      if(e.etat==="debut"){var r={id:e.id,role:e.role||e.id,tache:e.tache||"",modele:e.modele||"?",debut:e.ms,fin:null,ko:false};runs.push(r);ouverts[e.id]=r;}
+      else{var o=ouverts[e.id];if(o){o.fin=e.ms;o.ko=e.etat==="echec";delete ouverts[e.id];}}
+    }
+  });
+  var t0=ev[0].ms,t1=ev[ev.length-1].ms;runs.forEach(function(r){if(r.fin==null)t1=Math.max(t1,r.debut);});
+  var total=Math.max(1,t1-t0);
+  phases.forEach(function(p,i){p.fin=i+1<phases.length?phases[i+1].debut:t1;});
+
+  document.title="Sprint "+s.numero+" · replay";
+  document.getElementById("titre").textContent="Sprint "+s.numero+" · "+s.mode;
+  document.getElementById("objectif").textContent=s.objectif;
+
+  var travail=runs.reduce(function(a,r){return a+((r.fin||t1)-r.debut)},0);
+  var kpis=[[duree(total),"durée du sprint"],[String(runs.length),"agents lancés"],[duree(travail),"temps de travail cumulé"],[(travail/total).toFixed(1)+"×","parallélisme moyen"],[s.tour+"/3","tours de correction"]];
+  var K=document.getElementById("kpis");
+  kpis.forEach(function(k){var d=el("div","kpi");d.appendChild(el("b",null,k[0]));d.appendChild(el("span",null,k[1]));K.appendChild(d);});
+  var liv=el("div","kpi");
+  if(s.pr&&s.pr!=="local"){var a=el("a",null,"voir la PR");a.href=s.pr;a.target="_blank";a.rel="noopener";var b=el("b");b.appendChild(a);liv.appendChild(b);}
+  else liv.appendChild(el("b",null,s.pr?"local":"—"));
+  liv.appendChild(el("span",null,"livraison"));K.appendChild(liv);
+
+  var P=document.getElementById("phases");
+  if(!phases.length)P.appendChild(el("span","empty","Aucune phase notée."));
+  phases.forEach(function(p){var d=el("span","ph done",LIB[p.phase]||p.phase);d.appendChild(el("i",null,duree(p.fin-p.debut)));P.appendChild(d);});
+
+  var G=document.getElementById("gantt"),pct=function(ms){return((ms-t0)/total*100)+"%"};
+  if(!runs.length)G.appendChild(el("p","empty","Aucun agent noté dans le journal."));
+  runs.forEach(function(r){
+    var row=el("div","row"),lab=el("div","lbl",r.role);lab.title=r.role+(r.tache?" — "+r.tache:"");
+    lab.appendChild(el("small",null,(r.tache?r.tache+" · ":"")+r.modele));
+    var tr=el("div","track");
+    phases.forEach(function(p){if(p.debut>t0){var bd=el("div","band");bd.style.left=pct(p.debut);tr.appendChild(bd);}});
+    var bar=el("div","bar"+(r.ko?" ko":"")+(r.fin==null?" run":""));
+    bar.style.left=pct(r.debut);bar.style.width="calc("+(((r.fin||t1)-r.debut)/total*100)+"% )";bar.style.background=couleur(r.role);
+    bar.title=r.role+" · "+duree((r.fin||t1)-r.debut)+(r.ko?" · échec":"")+(r.fin==null?" · pas de fin notée":"");
+    tr.appendChild(bar);row.appendChild(lab);row.appendChild(tr);G.appendChild(row);
+  });
+  var ax=el("div","axis");ax.appendChild(el("span"));var ad=el("div");ad.appendChild(el("span",null,"0"));ad.appendChild(el("span",null,duree(total/2)));ad.appendChild(el("span",null,duree(total)));ax.appendChild(ad);
+  G.parentNode.appendChild(ax);
+
+  var L=document.getElementById("legend");
+  [["Product Owner","var(--po)"],["Tech Lead","var(--tl)"],["Développeurs","var(--dev)"],["DevOps","var(--ops)"],["Sécurité","var(--sec)"],["QA","var(--qa)"]].forEach(function(x){var s=el("span");var i=el("i");i.style.background=x[1];s.appendChild(i);s.appendChild(document.createTextNode(x[0]));L.appendChild(s);});
+
+  var parModele={};runs.forEach(function(r){parModele[r.modele]=(parModele[r.modele]||0)+((r.fin||t1)-r.debut);});
+  var M=document.getElementById("models");
+  Object.keys(parModele).sort(function(a,b){return parModele[b]-parModele[a]}).forEach(function(m){M.appendChild(el("span","model",m+" · "+duree(parModele[m])+" · "+Math.round(parModele[m]/Math.max(1,travail)*100)+"%"));});
+})();
+</script>
+</body>
+</html>

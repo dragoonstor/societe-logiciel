@@ -4,12 +4,16 @@ Skill Claude Code qui simule une **société d'édition de logiciel multi-agents
 
 ## L'équipe
 
-- **Product Owner** — user stories, critères d'acceptation, priorités, choix du mode (cadrage ou implémentation), sprint review
-- **Tech Lead / Architecte** — architecture, découpage en tâches parallélisables, revue de code
-- **Développeurs** — un agent par tâche, en parallèle, chacun dans son git worktree et sur sa branche
-- **DevOps** — build, CI, scripts, intégration des branches, préparation du déploiement (jamais exécuté)
-- **Sécurité** — analyse de menaces puis revue sécurité du code
-- **Testeurs QA** — plan de test, exécution contre les critères d'acceptation, rapport de bugs
+| Rôle | Modèle | Travail |
+|---|---|---|
+| **Product Owner** | Sonnet | user stories, critères d'acceptation, priorités, choix du mode (cadrage ou implémentation), sprint review |
+| **Tech Lead / Architecte** | Opus | architecture, découpage en tâches parallélisables, revue de code |
+| **Développeurs** | Sonnet | un agent par tâche, en parallèle, chacun dans son git worktree et sur sa branche |
+| **DevOps** | Sonnet | build, CI, scripts, intégration des branches, préparation du déploiement (jamais exécuté) |
+| **Sécurité** | Sonnet | analyse de menaces puis revue sécurité du code |
+| **Testeurs QA** | Sonnet | plan de test, exécution contre les critères d'acceptation, rapport de bugs |
+
+Chaque agent reçoit son propre modèle au lieu d'hériter de celui de la session : seul le Tech Lead utilise Opus. Demande un sprint « économique » pour passer QA et Sécurité en Haiku.
 
 ## Déroulé
 
@@ -31,6 +35,13 @@ Inspiré des orchestrateurs qui isolent chaque agent dans son worktree (comme Sc
 - en fin de sprint, la branche du sprint est poussée et une PR est ouverte avec le rapport de sprint comme description.
 
 Ton dossier de travail n'est jamais touché, et tes modifications non commitées restent hors du sprint. Dis « en local » ou « sans push » pour que rien ne soit poussé. Le détail est dans [`references/git.md`](references/git.md).
+
+## Voir l'équipe travailler
+
+Le Directeur tient un journal, `.societe/sprint-<N>/journal.jsonl` : une ligne par phase et par agent lancé ou terminé (format dans [`references/journal.md`](references/journal.md)).
+
+- **En direct** : le mod [`mod/societe-panneau`](mod/societe-panneau) ouvre un panneau à côté du chat avec la phase du sprint, les agents au travail (rôle, tâche, modèle, chrono) et ceux qui ont fini. Il s'ouvre tout seul quand un sprint démarre, ou avec `/societe`. Pour le charger : `claude --plugin-dir <chemin>/mod/societe-panneau`.
+- **En fin de sprint** : `sprint-replay.html`, une page autonome qui rejoue le sprint. On y voit la durée, le parallélisme, une frise de qui a travaillé quand et le temps passé par modèle.
 
 ## Installation
 

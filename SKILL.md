@@ -11,16 +11,18 @@ Pourquoi ce découpage : un agent qui spécifie, code, relit et teste son propre
 
 ## L'équipe
 
-| Rôle | Fichier de rôle | Livrable principal |
-|---|---|---|
-| Product Owner | `references/roles/po.md` | `backlog.md` |
-| Tech Lead / Architecte | `references/roles/tech-lead.md` | `architecture.md`, `tasks.md`, `review.md` |
-| Développeur (×N) | `references/roles/developer.md` | code + `dev-notes/<tâche>.md` |
-| DevOps (et intégrateur git) | `references/roles/devops.md` | build / CI / scripts, fusion des branches + `devops.md` |
-| Sécurité | `references/roles/security.md` | `security.md` |
-| Testeur QA (×1-2) | `references/roles/qa.md` | tests + `qa-report.md` |
+| Rôle | Fichier de rôle | Modèle | Livrable principal |
+|---|---|---|---|
+| Product Owner | `references/roles/po.md` | `sonnet` | `backlog.md` |
+| Tech Lead / Architecte | `references/roles/tech-lead.md` | `opus` | `architecture.md`, `tasks.md`, `review.md` |
+| Développeur (×N) | `references/roles/developer.md` | `sonnet` | code + `dev-notes/<tâche>.md` |
+| DevOps (et intégrateur git) | `references/roles/devops.md` | `sonnet` | build / CI / scripts, fusion des branches + `devops.md` |
+| Sécurité | `references/roles/security.md` | `sonnet` | `security.md` |
+| Testeur QA (×1-2) | `references/roles/qa.md` | `sonnet` | tests + `qa-report.md` |
 
-Les gabarits de chaque livrable sont dans `references/templates.md`. Le flux git (branches, worktrees, intégration, push et PR) est dans `references/git.md` : lis-le avant l'étape 4.
+Les gabarits de chaque livrable sont dans `references/templates.md`. Le flux git (branches, worktrees, intégration, push et PR) est dans `references/git.md` : lis-le avant l'étape 4. Le journal du sprint est décrit dans `references/journal.md` : lis-le avant l'étape 0.
+
+**Un modèle par rôle.** Passe le modèle de la colonne *Modèle* dans le paramètre `model` de chaque appel `Agent`. Sans ça, chaque agent hérite du modèle de la session, et tout le sprint coûte le prix du modèle le plus cher. Le Tech Lead garde `opus` : l'architecture, le découpage et la revue sont les décisions qui comptent le plus. Le reste du volume (code, tests, rédaction) va à `sonnet`. Si le client demande un sprint « économique », passe le QA et la Sécurité en `haiku` ; s'il demande la qualité maximale, ou nomme un modèle, suis sa demande.
 
 ## Comment lancer un agent
 
@@ -41,12 +43,14 @@ Donne à chaque agent **uniquement les entrées de son rôle** (ex. le QA reçoi
 
 Lance en parallèle (plusieurs appels `Agent` dans le même message) tout ce qui ne dépend pas d'un résultat encore attendu.
 
+**Journal.** À chaque lancement d'agent, à chaque fin d'agent et à chaque changement de phase, ajoute une ligne à `.societe/sprint-<N>/journal.jsonl` (format et commandes dans `journal.md`). C'est ce qui permet au client de voir l'équipe travailler : le panneau `societe-panneau` le suit en direct, et la page récapitulative le rejoue en fin de sprint. Une ligne oubliée n'est pas grave, mais un sprint sans journal est invisible.
+
 ## Déroulé du sprint
 
 Crée `.societe/sprint-<N>/` à la racine du projet (N = 1 + le plus grand sprint existant). Si le dossier de travail n'est pas un projet (dossier vide), crée le projet dans un sous-dossier nommé d'après le produit.
 
 ### 0. Accueil du besoin (toi)
-Lis rapidement le projet (README, structure, stack, tests existants) pour donner du contexte aux agents. Écris le besoin du client mot pour mot dans `.societe/sprint-<N>/brief.md`, avec ton résumé du contexte technique.
+Lis rapidement le projet (README, structure, stack, tests existants) pour donner du contexte aux agents. Écris le besoin du client mot pour mot dans `.societe/sprint-<N>/brief.md`, avec ton résumé du contexte technique. Ouvre le journal avec la ligne `sprint`, puis la phase `accueil`.
 
 ### 1. Product Owner → backlog
 Le PO transforme le brief en user stories priorisées avec critères d'acceptation testables, et **décide du mode** du sprint :
@@ -91,7 +95,9 @@ Le PO vérifie chaque user story contre ses critères d'acceptation (à partir d
 
 En mode `implementation`, livre la branche (`git.md`, section 4) : en mode de livraison `push`, pousse `societe/sprint-<N>` et ouvre une PR vers la branche de base avec le rapport comme description ; en mode `local`, ne pousse rien. **Ne fusionne jamais la PR** : c'est la validation du client.
 
-Présente enfin au client un résumé court : ce qui est livré, le lien de la PR (ou le nom de la branche), comment l'essayer, ce qui reste, les hypothèses prises, et la proposition de backlog pour le sprint suivant.
+Écris la ligne `livraison` du journal (même en mode `cadrage`, avec `"pr":"local"`), puis génère la page récapitulative `sprint-replay.html` (commande dans `journal.md`).
+
+Présente enfin au client un résumé court : ce qui est livré, le lien de la PR (ou le nom de la branche), le chemin de la page récapitulative, comment l'essayer, ce qui reste, les hypothèses prises, et la proposition de backlog pour le sprint suivant.
 
 ## Règles de la société
 

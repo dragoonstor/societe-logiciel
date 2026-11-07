@@ -180,5 +180,5 @@ Tests : ... — Revue : x points ouverts — Sécurité : x points ouverts — B
 ## Proposition de sprint suivant
 - ...
 ## Fichiers du sprint
-`.societe/sprint-<N>/`
+`.societe/sprint-<N>/` — replay du sprint : `.societe/sprint-<N>/sprint-replay.html`
 ```
