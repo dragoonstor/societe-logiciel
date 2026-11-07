@@ -6,7 +6,7 @@ Skill Claude Code qui simule une **société d'édition de logiciel multi-agents
 
 | Rôle | Modèle | Travail |
 |---|---|---|
-| **Chargé de compte** | Sonnet | pose au client au plus 4 questions au départ (réponses proposées), écrit le cahier des charges |
+| **Chargé de compte** | Sonnet | pose au client jusqu'à 3 tours de 4 questions au départ (réponses proposées, arrêt dès que c'est clair), écrit le cahier des charges ; si le besoin reste flou, le sprint passe en mode cadrage |
 | **Product Owner** | Sonnet | user stories, critères d'acceptation, priorités, choix du mode (cadrage ou implémentation), sprint review |
 | **Tech Lead / Architecte** | Opus | architecture, découpage en tâches parallélisables, revue de code |
 | **Développeurs** | Sonnet | un agent par tâche, en parallèle, chacun dans son git worktree et sur sa branche |

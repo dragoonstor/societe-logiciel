@@ -56,9 +56,14 @@ Lis rapidement le projet (README, structure, stack, tests existants) pour donner
 ### 0 bis. Chargé de compte → cahier des charges (le seul échange avec le client)
 Le chargé de compte lit le brief et le projet, puis écrit `cahier-des-charges.md` : ce que veut le client, chaque point rempli par sa meilleure supposition, et au plus 4 questions avec des réponses proposées.
 
-- **S'il y a des questions**, pose-les au client **en un seul appel** `AskUserQuestion`, en reprenant ses options (la recommandée en premier). Le client peut répondre « faites au mieux » : les suppositions tiennent alors.
-- Reporte les réponses dans la section *Réponses du client* du cahier des charges, et remplace les suppositions concernées.
-- **S'il n'y a aucune question**, ou si le client a demandé de ne pas être dérangé (« sans questions », « démerdez-vous »), passe directement à la suite.
+**Jusqu'à 3 tours de questions**, 4 questions au plus par tour :
+1. S'il y a des questions, pose-les au client **en un seul appel** `AskUserQuestion` par tour, en reprenant ses options (la recommandée en premier). Ajoute toujours la possibilité de répondre « faites au mieux ».
+2. Reporte les réponses dans *Réponses du client — tour k*.
+3. Relance le chargé de compte (étape « tours suivants » de sa fiche) : il intègre les réponses et décide s'il faut un autre tour. S'il pose de nouvelles questions et qu'on n'a pas fait 3 tours, recommence en 1.
+
+Arrête les questions dès que le chargé de compte n'en pose plus, après le 3ᵉ tour, ou dès que le client répond « faites au mieux » : les suppositions restantes tiennent. Si le client a demandé de ne pas être dérangé (« sans questions », « démerdez-vous »), saute tous les tours.
+
+Le chargé de compte termine par un *Bilan* : **clair** ou **flou**. Un bilan *flou* (des inconnues importantes après 3 tours) oblige le PO à choisir le mode `cadrage` : mieux vaut un dossier de specs que du code bâti sur des suppositions.
 
 C'est le seul moment où l'on sollicite le client. Pour un tout petit besoin (un bug, une faute de frappe), saute cette étape.
 
