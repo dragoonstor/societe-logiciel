@@ -1,0 +1,6 @@
+{
+  "name": "societe-panneau",
+  "version": "0.1.0",
+  "description": "Panneau en direct qui montre la société (skill societe-logiciel) au travail : phase du sprint et agents.",
+  "types": "./types/index.d.ts"
+}
