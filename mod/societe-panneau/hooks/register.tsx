@@ -14,12 +14,12 @@ const sprint = atom({ plugin: 'societe-panneau', key: 'sprint' } as const, null,
 })
 
 const PHASES_IMPL = [
-  'accueil', 'backlog', 'architecture', 'cadrage', 'developpement',
+  'accueil', 'client', 'backlog', 'architecture', 'cadrage', 'developpement',
   'integration', 'revue', 'qa', 'review', 'livraison',
 ]
-const PHASES_CADRAGE = ['accueil', 'backlog', 'architecture', 'cadrage', 'review']
+const PHASES_CADRAGE = ['accueil', 'client', 'backlog', 'architecture', 'cadrage', 'review']
 const LIBELLES: Record<string, string> = {
-  accueil: 'accueil', backlog: 'backlog', architecture: 'archi', cadrage: 'cadrage',
+  accueil: 'accueil', client: 'client', backlog: 'backlog', architecture: 'archi', cadrage: 'cadrage',
   developpement: 'dev', integration: 'intégration', revue: 'revue', qa: 'QA',
   correction: 'correction', review: 'sprint review', livraison: 'livraison',
 }
