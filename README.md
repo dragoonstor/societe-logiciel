@@ -13,6 +13,8 @@ Skill Claude Code qui simule une **société d'édition de logiciel multi-agents
 
 ## Déroulé
 
+![Déroulé d'un sprint](docs/schema-sprint.svg)
+
 Brief → Backlog (PO) → Architecture + tâches (Tech Lead) → Cadrage sécurité / QA / DevOps
 → *(mode implémentation)* Dev en parallèle → Revue Tech Lead + Sécurité → QA → boucle de correction (max 3 tours)
 → Sprint review (PO) → Rapport de sprint.
