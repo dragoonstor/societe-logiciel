@@ -4,6 +4,7 @@ Tous les fichiers vivent dans `.societe/sprint-<N>/`. Garde-les courts et concre
 
 ## Sommaire
 - brief.md
+- cahier-des-charges.md
 - backlog.md
 - architecture.md
 - tasks.md
@@ -27,6 +28,27 @@ Projet : <chemin> — Stack : <...> — Tests : <commande> — Remarques : <...>
 Branche de base : <nom> @ <commit> — Branche du sprint : `societe/sprint-<N>` — Worktree du sprint : <chemin>
 Livraison : push | local — <raison si local>
 Modifications non commitées du client (hors sprint) : <aucune | liste>
+```
+
+## cahier-des-charges.md
+```markdown
+# Cahier des charges — Sprint <N>
+## Le besoin, reformulé
+<2-3 phrases : ce que le client pourra faire à la fin>
+## Utilisateurs
+- <qui> *(supposé | réponse du client)*
+## Résultat attendu et critères de réussite
+- <comment le client jugera que c'est réussi>
+## Contraintes
+- <stack, plateforme, délai, données existantes…>
+## Hors sujet
+- ...
+## Questions pour le client — tour <k> (4 au plus, 0 si tout est clair ; 3 tours au plus)
+1. <question> — options : <A (recommandé)> / <B> / <C>
+## Réponses du client — tour <k>
+<rempli par le Directeur ; « faites au mieux » : plus de questions, les suppositions tiennent>
+## Bilan
+clair | flou — <inconnues importantes restantes, s'il y en a>
 ```
 
 ## backlog.md
@@ -173,6 +195,8 @@ Worktree pour essayer : <chemin> — à retirer ensuite avec `git worktree remov
 `<commandes>`
 ## Qualité
 Tests : ... — Revue : x points ouverts — Sécurité : x points ouverts — Bugs : x ouverts
+## Ce que le client a demandé
+<résumé du cahier des charges et de ses réponses>
 ## Hypothèses prises (à valider par le client)
 - ...
 ## Dette et points ouverts

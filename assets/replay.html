@@ -6,7 +6,7 @@
 <title>Replay du sprint</title>
 <style>
 :root{--bg:#f7f6f2;--card:#fff;--txt:#1f1e1b;--mut:#6b6a64;--line:#dcdad2;--acc:#d97757;--ok:#1d9e75;--ko:#d14343;
---po:#7f77dd;--tl:#378add;--dev:#1d9e75;--ops:#ba7517;--sec:#d4537e;--qa:#d85a30;--dir:#888780}
+--cdc:#639922;--po:#7f77dd;--tl:#378add;--dev:#1d9e75;--ops:#ba7517;--sec:#d4537e;--qa:#d85a30;--dir:#888780}
 @media (prefers-color-scheme:dark){:root{--bg:#0e0f11;--card:#16181b;--txt:#ecebe6;--mut:#8f8e88;--line:#2a2d31;--acc:#f0997b}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -62,8 +62,9 @@ __JOURNAL__
 </script>
 <script>
 (function(){
-  var LIB={accueil:"accueil",backlog:"backlog",architecture:"archi",cadrage:"cadrage",developpement:"dev",integration:"intégration",revue:"revue",qa:"QA",correction:"correction",review:"sprint review",livraison:"livraison"};
+  var LIB={accueil:"accueil",client:"client",backlog:"backlog",architecture:"archi",cadrage:"cadrage",developpement:"dev",integration:"intégration",revue:"revue",qa:"QA",correction:"correction",review:"sprint review",livraison:"livraison"};
   function couleur(role){var r=(role||"").toLowerCase();
+    if(r.indexOf("compte")>=0)return"var(--cdc)";
     if(r.indexOf("product")>=0||r==="po")return"var(--po)";
     if(r.indexOf("tech")>=0||r.indexOf("archi")>=0)return"var(--tl)";
     if(r.indexOf("devops")>=0||r.indexOf("intég")>=0)return"var(--ops)";
@@ -128,7 +129,7 @@ __JOURNAL__
   G.parentNode.appendChild(ax);
 
   var L=document.getElementById("legend");
-  [["Product Owner","var(--po)"],["Tech Lead","var(--tl)"],["Développeurs","var(--dev)"],["DevOps","var(--ops)"],["Sécurité","var(--sec)"],["QA","var(--qa)"]].forEach(function(x){var s=el("span");var i=el("i");i.style.background=x[1];s.appendChild(i);s.appendChild(document.createTextNode(x[0]));L.appendChild(s);});
+  [["Chargé de compte","var(--cdc)"],["Product Owner","var(--po)"],["Tech Lead","var(--tl)"],["Développeurs","var(--dev)"],["DevOps","var(--ops)"],["Sécurité","var(--sec)"],["QA","var(--qa)"]].forEach(function(x){var s=el("span");var i=el("i");i.style.background=x[1];s.appendChild(i);s.appendChild(document.createTextNode(x[0]));L.appendChild(s);});
 
   var parModele={};runs.forEach(function(r){parModele[r.modele]=(parModele[r.modele]||0)+((r.fin||t1)-r.debut);});
   var M=document.getElementById("models");
