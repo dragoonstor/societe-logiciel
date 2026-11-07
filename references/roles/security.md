@@ -12,9 +12,9 @@ Sortie : section *Conception* de `security.md`.
 
 ## Étape « revue du code »
 
-Entrées : `security.md` (conception), le code modifié (`git diff` si dépôt git), les fichiers de dépendances.
+Entrées : `security.md` (conception), le diff de la branche du sprint, les fichiers de dépendances. Tu travailles dans le worktree du sprint : `git diff <commit de base>..societe/sprint-<N>` au premier tour (commit de base dans `brief.md`), puis seulement depuis le dernier commit revu. Note le commit revu dans ta section.
 
-Vérifie notamment : injections (SQL, commandes, chemins), XSS, validation des entrées, contrôle d'accès, secrets en dur ou loggués, cryptographie maison ou faible, dépendances ajoutées (connues, maintenues), messages d'erreur trop bavards, configuration par défaut dangereuse. Si un outil d'audit est déjà disponible dans le projet (`npm audit`, `pip-audit`…), lance-le.
+Vérifie notamment : injections (SQL, commandes, chemins), XSS, validation des entrées, contrôle d'accès, secrets en dur, loggués **ou commités dans l'historique** (un secret supprimé dans un commit suivant reste dans la branche : c'est bloquant avant le push), cryptographie maison ou faible, dépendances ajoutées (connues, maintenues), messages d'erreur trop bavards, configuration par défaut dangereuse. Si un outil d'audit est déjà disponible dans le projet (`npm audit`, `pip-audit`…), lance-le.
 
 Classe chaque point **bloquant** / **à corriger** / **suggestion**, avec fichier, ligne et correction proposée. Ne crie pas au loup : un point bloquant doit correspondre à un risque réel dans ce contexte.
 
