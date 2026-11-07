@@ -41,7 +41,7 @@ Ton dossier de travail n'est jamais touché, et tes modifications non commitées
 
 Le Directeur tient un journal, `.societe/sprint-<N>/journal.jsonl` : une ligne par phase et par agent lancé ou terminé (format dans [`references/journal.md`](references/journal.md)).
 
-- **En direct** : le mod [`mod/societe-panneau`](mod/societe-panneau) ouvre un panneau à côté du chat avec la phase du sprint, les agents au travail (rôle, tâche, modèle, chrono) et ceux qui ont fini. Il s'ouvre tout seul quand un sprint démarre, ou avec `/societe`. Pour le charger : `claude --plugin-dir <chemin>/mod/societe-panneau`.
+- **En direct** : le mod [`mod/societe-panneau`](mod/societe-panneau) ouvre un panneau à côté du chat avec la phase du sprint, les agents au travail (rôle, tâche, modèle, chrono) et ceux qui ont fini. Il s'ouvre tout seul quand un sprint démarre, ou avec `/societe`. Installation : voir plus bas.
 - **En fin de sprint** : `sprint-replay.html`, une page autonome qui rejoue le sprint. On y voit la durée, le parallélisme, une frise de qui a travaillé quand et le temps passé par modèle.
 
 ## Installation
@@ -52,7 +52,19 @@ Copie le dossier dans tes skills Claude Code :
 git clone https://github.com/dragoonstor/societe-logiciel.git ~/.claude/skills/societe-logiciel
 ```
 
-Puis dans Claude Code : « Lance un sprint avec la société pour … » ou `/societe-logiciel`.
+Puis installe le panneau en direct (une seule fois, il sera ensuite chargé dans toutes tes sessions).
+
+Dans l'app de bureau Claude : clique sur **+** à côté de la zone de saisie, puis **Plugins**, **Add marketplace** avec `dragoonstor/societe-logiciel`, puis **Add plugin** sur `societe-panneau`.
+
+Dans un terminal Claude Code :
+
+```
+/plugin install societe-panneau --marketplace dragoonstor/societe-logiciel
+```
+
+Réponds `y` pour ajouter le marketplace, puis garde la portée « user » (Entrée). Le dépôt est privé : la machine doit déjà avoir un accès git à GitHub (`gh auth login` puis `gh auth setup-git`).
+
+Ensuite, dans Claude Code : « Lance un sprint avec la société pour … » ou `/societe-logiciel`.
 
 ## Garde-fous
 
