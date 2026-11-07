@@ -16,11 +16,11 @@ Pourquoi ce découpage : un agent qui spécifie, code, relit et teste son propre
 | Product Owner | `references/roles/po.md` | `backlog.md` |
 | Tech Lead / Architecte | `references/roles/tech-lead.md` | `architecture.md`, `tasks.md`, `review.md` |
 | Développeur (×N) | `references/roles/developer.md` | code + `dev-notes/<tâche>.md` |
-| DevOps | `references/roles/devops.md` | build / CI / scripts + `devops.md` |
+| DevOps (et intégrateur git) | `references/roles/devops.md` | build / CI / scripts, fusion des branches + `devops.md` |
 | Sécurité | `references/roles/security.md` | `security.md` |
 | Testeur QA (×1-2) | `references/roles/qa.md` | tests + `qa-report.md` |
 
-Les gabarits de chaque livrable sont dans `references/templates.md`.
+Les gabarits de chaque livrable sont dans `references/templates.md`. Le flux git (branches, worktrees, intégration, push et PR) est dans `references/git.md` : lis-le avant l'étape 4.
 
 ## Comment lancer un agent
 
@@ -30,7 +30,7 @@ Pour chaque rôle, lance un sous-agent `general-purpose` avec un prompt de cette
 Tu es <Rôle> dans une société d'édition de logiciel.
 1. Lis ta fiche de rôle : <chemin absolu du skill>/references/roles/<role>.md
 2. Lis les gabarits : <chemin absolu du skill>/references/templates.md
-Projet : <chemin absolu du projet>
+Projet : <chemin absolu du worktree où cet agent travaille (voir git.md)>
 Dossier du sprint : <chemin absolu>/.societe/sprint-<N>/
 Entrées à lire : <liste des fichiers du sprint utiles à ce rôle>
 Ta mission : <mission précise de cette étape>
@@ -56,7 +56,7 @@ Le PO transforme le brief en user stories priorisées avec critères d'acceptati
 Le client n'est pas sollicité : quand une info manque, le PO fait l'hypothèse la plus raisonnable et la note dans la section *Hypothèses* du backlog.
 
 ### 2. Tech Lead → architecture et découpage
-Le Tech Lead lit le backlog et le code, puis écrit `architecture.md` (choix techniques justifiés) et `tasks.md` : des tâches de dev, chacune avec **les fichiers qu'elle possède**. Deux tâches parallèles ne doivent jamais toucher les mêmes fichiers ; sinon il les met en séquence (champ `dépend de`). Il prévoit aussi la tâche DevOps si utile.
+Le Tech Lead lit le backlog et le code, puis écrit `architecture.md` (choix techniques justifiés) et `tasks.md` : des tâches de dev, chacune avec **les fichiers qu'elle possède**. Chaque dev a son worktree, donc un fichier partagé ne s'écrase plus en silence, mais il produit un conflit de fusion à l'intégration : le Tech Lead évite donc que deux tâches parallèles modifient le même code, et sinon les met en séquence (champ `dépend de`). Il prévoit aussi la tâche DevOps si utile.
 
 ### 3. Cadrage en parallèle (Sécurité, QA, DevOps)
 En parallèle :
@@ -66,30 +66,38 @@ En parallèle :
 
 **Si mode `cadrage`** : passe directement à l'étape 8 (rapport), sans écrire de code.
 
-### 4. Développement
-Lance un agent Développeur **par tâche** de `tasks.md` dont les dépendances sont satisfaites, tous en parallèle, plus le DevOps s'il a une tâche. Chaque dev ne modifie que les fichiers de sa tâche et écrit ses tests unitaires. Une fois une vague terminée, lance la vague suivante (tâches qui en dépendaient).
+### 4. Développement et intégration
+Prépare d'abord le dépôt et la branche du sprint (`git.md`, section 0).
+
+Puis, par vague : crée un worktree et une branche par tâche de `tasks.md` dont les dépendances sont satisfaites, et lance un agent Développeur par tâche dans son worktree, tous en parallèle (plus le DevOps s'il a une tâche). Chaque dev écrit ses tests unitaires et commite sur sa branche. Quand la vague est finie, le DevOps intégrateur fusionne les branches dans `societe/sprint-<N>` et vérifie build et tests (`git.md`, section 2). La vague suivante part de la branche du sprint ainsi mise à jour.
 
 Au-delà de ~5 tâches parallèles, regroupe par lots : trop d'agents simultanés coûte cher pour peu de gain.
 
 ### 5. Revue de code (Tech Lead + Sécurité, en parallèle)
+Les deux relisent le diff de la branche du sprint depuis le commit de base, dans le worktree du sprint.
 - Tech Lead : revue de conformité à l'architecture, qualité, lisibilité → `review.md`.
 - Sécurité : revue du code produit (injections, secrets, authz, dépendances) → `security.md` (section *Revue du code*).
 
 Chaque remarque est classée **bloquant** / **à corriger** / **suggestion**.
 
 ### 6. Tests QA
-Le QA écrit et **exécute** des tests (automatisés quand le projet le permet, sinon vérifications manuelles décrites pas à pas) contre chaque critère d'acceptation, plus des cas limites. Il consigne les bugs dans `qa-report.md` avec sévérité et étapes de reproduction.
+Le QA travaille dans le worktree du sprint, donc sur le code réellement intégré. Il écrit et **exécute** des tests (automatisés quand le projet le permet, sinon vérifications manuelles décrites pas à pas) contre chaque critère d'acceptation, plus des cas limites. Il consigne les bugs dans `qa-report.md` avec sévérité et étapes de reproduction.
 
 ### 7. Boucle de correction (max 3 tours)
-S'il reste des remarques **bloquantes** ou **à corriger** (revue, sécurité) ou des bugs QA de sévérité haute/moyenne : relance les devs concernés avec la liste précise des points à traiter, puis refais revue + QA **uniquement sur ce qui a changé**. Arrête au bout de 3 tours même s'il reste des points : ils iront dans le rapport comme dette connue. Ce plafond évite qu'une équipe tourne en rond sur un problème qui demande en réalité une décision du client.
+S'il reste des remarques **bloquantes** ou **à corriger** (revue, sécurité) ou des bugs QA de sévérité haute/moyenne : relance les devs concernés avec la liste précise des points à traiter, chacun dans un nouveau worktree de correction, puis fais intégrer et refais revue + QA **uniquement sur ce qui a changé** depuis le dernier commit revu. Arrête au bout de 3 tours même s'il reste des points : ils iront dans le rapport comme dette connue. Ce plafond évite qu'une équipe tourne en rond sur un problème qui demande en réalité une décision du client.
 
-### 8. Sprint review (PO) et rapport
-Le PO vérifie chaque user story contre ses critères d'acceptation (à partir du rapport QA et du code) et la marque *Acceptée* / *Refusée* / *Partielle*. Ensuite, toi, tu écris `.societe/sprint-<N>/sprint-report.md` (gabarit dans `templates.md`) et tu présentes au client un résumé court : ce qui est livré, comment l'essayer, ce qui reste, les hypothèses prises, et la proposition de backlog pour le sprint suivant.
+### 8. Sprint review (PO), rapport et livraison
+Le PO vérifie chaque user story contre ses critères d'acceptation (à partir du rapport QA et du code) et la marque *Acceptée* / *Refusée* / *Partielle*. Ensuite, toi, tu écris `.societe/sprint-<N>/sprint-report.md` (gabarit dans `templates.md`).
+
+En mode `implementation`, livre la branche (`git.md`, section 4) : en mode de livraison `push`, pousse `societe/sprint-<N>` et ouvre une PR vers la branche de base avec le rapport comme description ; en mode `local`, ne pousse rien. **Ne fusionne jamais la PR** : c'est la validation du client.
+
+Présente enfin au client un résumé court : ce qui est livré, le lien de la PR (ou le nom de la branche), comment l'essayer, ce qui reste, les hypothèses prises, et la proposition de backlog pour le sprint suivant.
 
 ## Règles de la société
 
 - **Autonomie** : ne pose pas de question au client pendant le sprint. Toute décision faute d'information est prise par le rôle concerné et tracée (hypothèse dans le backlog, décision dans `architecture.md`). Le client relit tout à la fin.
-- **Pas d'actions irréversibles ni publiques** : pas de `git push`, pas de déploiement réel, pas de publication de paquet, pas de suppression de données existantes. Ne commite que si le client l'a demandé ; sinon les changements restent dans l'arbre de travail pour qu'il les relise. Le DevOps prépare le déploiement, il ne l'exécute pas.
+- **Git, dans un cadre strict** : on commite uniquement sur les branches `societe/…`, dans les worktrees de la société. On pousse uniquement la branche `societe/sprint-<N>`, et seulement en mode de livraison `push`. Jamais de push sur la branche de base, de `--force`, de fusion de PR, ni de modification du dossier de travail du client. La liste complète est dans `git.md`, section *Interdits*.
+- **Pas d'autres actions irréversibles ni publiques** : pas de déploiement réel, pas de publication de paquet, pas de suppression de données existantes. Le DevOps prépare le déploiement, il ne l'exécute pas.
 - **Traçabilité** : tout passe par les fichiers du dossier de sprint. Si tu dois relayer une info d'un agent à l'autre, écris-la dans un fichier plutôt que de la recopier dans un prompt.
 - **Ton rôle à toi** : lancer les bons agents au bon moment, vérifier que chaque livrable existe et est utilisable avant de passer à l'étape suivante (sinon relance l'agent avec une consigne plus précise), et tenir le client informé en une ligne à chaque changement de phase.
-- **Taille d'équipe adaptée** : pour un petit besoin (un bug, une petite fonctionnalité), une seule tâche de dev, un QA, revue Tech Lead + Sécurité en une passe suffisent. Ne mobilise pas six agents pour corriger une faute de frappe — dans ce cas, dis-le au client et fais la correction directement.
+- **Taille d'équipe adaptée** : pour un petit besoin (un bug, une petite fonctionnalité), une seule tâche de dev, un QA, revue Tech Lead + Sécurité en une passe suffisent. Ne mobilise pas six agents pour corriger une faute de frappe — dans ce cas, dis-le au client et fais la correction directement. Avec une seule tâche, le dev peut travailler directement dans le worktree du sprint : pas besoin de branche de tâche ni d'intégration.

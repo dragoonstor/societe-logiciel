@@ -12,7 +12,7 @@ Sortie : section *Plan de test* de `qa-report.md`.
 
 ## Étape « exécution »
 
-Entrées : `backlog.md`, `qa-report.md` (plan), `architecture.md` (commandes de build/test), le code.
+Entrées : `backlog.md`, `qa-report.md` (plan), `architecture.md` (commandes de build/test), le code. Tu travailles dans le **worktree du sprint**, où toutes les tâches sont intégrées : c'est ce qui sera livré au client. Commite tes tests sur la branche du sprint (`QA : <ce qui est testé>`), ne pousse rien.
 
 1. Construis et lance le produit comme le ferait un utilisateur (ou un client de l'API).
 2. Automatise les cas de test quand le projet le permet (tests d'intégration / end-to-end dans le dossier de tests du projet), puis exécute-les. Sinon, exécute-les à la main (commandes, requêtes, scripts) et note précisément ce que tu as fait et observé.

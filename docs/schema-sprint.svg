@@ -51,7 +51,7 @@ text { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
 
 <g class="teal"><rect x="210" y="410" width="260" height="56" rx="8" stroke-width="0.5"/>
 <text class="th" x="340" y="430" text-anchor="middle" dominant-baseline="central">4. Développeurs ×N</text>
-<text class="ts" x="340" y="448" text-anchor="middle" dominant-baseline="central">une tâche chacun, en parallèle</text></g>
+<text class="ts" x="340" y="448" text-anchor="middle" dominant-baseline="central">une branche chacun, puis intégration</text></g>
 <line x1="340" y1="466" x2="340" y2="484" class="arr" marker-end="url(#arrow)"/>
 
 <g class="teal"><rect x="210" y="486" width="260" height="56" rx="8" stroke-width="0.5"/>
@@ -76,7 +76,7 @@ text { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
 <line x1="340" y1="770" x2="340" y2="788" class="arr" marker-end="url(#arrow)"/>
 
 <g class="gray"><rect x="210" y="790" width="260" height="44" rx="8" stroke-width="0.5"/>
-<text class="th" x="340" y="812" text-anchor="middle" dominant-baseline="central">Client : rapport de sprint</text></g>
+<text class="th" x="340" y="812" text-anchor="middle" dominant-baseline="central">Client : rapport + PR</text></g>
 
 <path d="M570 350 L630 350 L630 742 L474 742" class="arr" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
 <text class="ts lbl" x="620" y="556" text-anchor="end">si mode cadrage</text>
