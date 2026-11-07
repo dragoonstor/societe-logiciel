@@ -23,6 +23,10 @@ Tous les fichiers vivent dans `.societe/sprint-<N>/`. Garde-les courts et concre
 <texte exact>
 ## Contexte technique
 Projet : <chemin> — Stack : <...> — Tests : <commande> — Remarques : <...>
+## Git (mode implementation)
+Branche de base : <nom> @ <commit> — Branche du sprint : `societe/sprint-<N>` — Worktree du sprint : <chemin>
+Livraison : push | local — <raison si local>
+Modifications non commitées du client (hors sprint) : <aucune | liste>
 ```
 
 ## backlog.md
@@ -76,7 +80,8 @@ Build : `...` — Tests : `...` — Lancer : `...`
 - Fichiers possédés : `src/...`, `tests/...`
 - Dépend de : —
 - Fini quand : <interface exposée, tests attendus>
-- Statut : à faire | en cours | fait
+- Branche : `societe/sprint-<N>-T1`
+- Statut : à faire | en cours | fait | intégrée
 ```
 
 ## dev-notes/<tâche>.md
@@ -86,6 +91,8 @@ Build : `...` — Tests : `...` — Lancer : `...`
 - ...
 ## Fichiers modifiés
 - ...
+## Commits
+Branche : `societe/sprint-<N>-T<n>` — <sha court> <message>
 ## Tests
 Commande : `...` — Résultat : <x passés / y échoués>
 ## Besoins hors périmètre
@@ -97,6 +104,7 @@ Commande : `...` — Résultat : <x passés / y échoués>
 ## review.md
 ```markdown
 # Revue de code — Sprint <N> (tour <k>)
+Diff revu : `<commit de départ>..<commit revu>`
 Build : ✅/❌ — Tests : ✅/❌ (<détail>)
 | # | Gravité | Fichier:ligne | Problème | Correction attendue | Tâche | Statut |
 |---|---|---|---|---|---|---|
@@ -112,6 +120,7 @@ Build : ✅/❌ — Tests : ✅/❌ (<détail>)
 ### Exigences pour les devs
 - ...
 ## Revue du code (tour <k>)
+Diff revu : `<commit de départ>..<commit revu>`
 | # | Gravité | Fichier:ligne | Problème | Correction | Statut |
 |---|---|---|---|---|---|
 ```
@@ -125,6 +134,11 @@ Build local / Tests / CI / Déploiement cible / Variables d'environnement (noms)
 - Fichiers : ...
 - Vérifié localement : ...
 - Non vérifiable ici : ...
+## Intégration (vague <v>)
+| Branche | Résultat | Conflits | Build / tests après |
+|---|---|---|---|
+| `societe/sprint-<N>-T1` | intégrée / annulée | aucun / résolu : <fichier> / logique : <détail> | ✅ / ❌ |
+Tâches à reprendre : <aucune | T<k> — raison>
 ```
 
 ## qa-report.md
@@ -147,6 +161,11 @@ Non-régression : <commande> → <résultat>
 ```markdown
 # Rapport de sprint <N> — <objectif>
 **Mode :** ... — **Tours de correction :** k/3
+
+## Livraison
+Branche : `societe/sprint-<N>` (base : <branche> @ <commit>) — PR : <lien | non poussée (mode local) : `git push -u origin societe/sprint-<N>`>
+La PR n'est pas fusionnée : c'est au client de la relire et de la fusionner.
+Worktree pour essayer : <chemin> — à retirer ensuite avec `git worktree remove <chemin>`
 
 ## Livré
 - US1 — <statut PO> — <ce que le client peut faire maintenant>
