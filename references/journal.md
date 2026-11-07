@@ -26,8 +26,8 @@ echo "{\"t\":\"$(date -u +%FT%TZ)\",\"type\":\"tour\",\"tour\":1}" >> <J>
 echo "{\"t\":\"$(date -u +%FT%TZ)\",\"type\":\"livraison\",\"pr\":\"<url>\"}" >> <J>
 ```
 
-- **Phases** (valeurs exactes) : `accueil`, `backlog`, `architecture`, `cadrage`, `developpement`, `integration`, `revue`, `qa`, `correction`, `review`, `livraison`.
-- **id** : unique pendant que l'agent tourne. `PO`, `TL`, `SEC`, `QA`, `DEVOPS`, ou l'id de la tâche (`T1`). Un même rôle relancé plus tard réutilise son id : la nouvelle ligne `debut` remplace l'ancienne.
+- **Phases** (valeurs exactes) : `accueil`, `client`, `backlog`, `architecture`, `cadrage`, `developpement`, `integration`, `revue`, `qa`, `correction`, `review`, `livraison`.
+- **id** : unique pendant que l'agent tourne. `CDC` (chargé de compte), `PO`, `TL`, `SEC`, `QA`, `DEVOPS`, ou l'id de la tâche (`T1`). Un même rôle relancé plus tard réutilise son id : la nouvelle ligne `debut` remplace l'ancienne.
 - Garde les textes courts, sans guillemets doubles ni retours à la ligne.
 - Le panneau fonctionne même si une ligne est mal formée : elle est ignorée.
 
