@@ -24,4 +24,6 @@ Vérifie : conformité à l'architecture, respect du périmètre de chaque tâch
 
 Si l'intégration a laissé une tâche en conflit de logique, tranche : quelle implémentation garder, et ce que le dev doit reprendre.
 
-Classe chaque remarque **bloquant** (casse, faux, non conforme), **à corriger** (vrai problème mais non bloquant), **suggestion**. Chaque remarque cite le fichier et la ligne et dit quoi changer. Sortie : `review.md`.
+Classe chaque remarque **bloquant** (casse, faux, non conforme), **à corriger** (vrai problème mais non bloquant), **suggestion**. Chaque remarque cite le fichier et la ligne et dit quoi changer. Juge au niveau de la *Definition of Done* du backlog : ce qui la dépasse (robustesse non demandée, cas extrêmes d'un outil personnel) est au mieux une suggestion. Sortie : `review.md`.
+
+En contre-revue (boucle de correction), vérifie seulement tes points ouverts et le diff des corrections ; n'ouvre de nouveau point que s'il est bloquant.
