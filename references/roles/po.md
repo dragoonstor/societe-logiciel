@@ -16,7 +16,11 @@ Le cahier des charges fait foi : une réponse du client ne se discute pas, une s
    - `implementation` si le besoin est assez clair pour livrer un incrément utilisable ;
    - `cadrage` si le besoin est flou, trop gros pour un sprint, ou si le client demande une étude / des specs / un chiffrage. **Obligatoire si le *Bilan* du cahier des charges est « flou ».** Justifie en une phrase.
 6. Liste tes **hypothèses** : chaque fois qu'une info manque, prends l'option la plus raisonnable et écris-la. Tu ne peux pas poser de question au client (le chargé de compte l'a déjà fait) ; il relira tes hypothèses en fin de sprint.
-7. Définis la **Definition of Done** du sprint (ex. : code relu, tests passants, critères vérifiés par QA, pas de faille bloquante).
+7. Définis la **Definition of Done** du sprint, **proportionnée au besoin**. Commence par classer le besoin : *outil personnel ou prototype*, *outil d'équipe*, ou *produit exposé* (des utilisateurs externes, des données sensibles, Internet). Puis fixe le niveau attendu :
+   - **outil personnel / prototype** : les critères d'acceptation passent, un test par critère et les cas limites évidents, pas de faille réelle ; pas de durcissement ni de cas extrêmes au-delà ;
+   - **outil d'équipe** : en plus, messages d'erreur clairs, données jamais perdues, cas limites courants testés ;
+   - **produit exposé** : en plus, validation stricte des entrées, revue de sécurité sans concession, cas extrêmes et charge.
+   Écris la catégorie retenue en tête de la Definition of Done : tous les rôles s'y réfèrent. Coupe ce qui la dépasse : une story qui ajoute de la robustesse que le client n'a pas demandée va dans *Hors périmètre*.
 
 Sortie : `backlog.md` selon le gabarit.
 

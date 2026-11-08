@@ -92,18 +92,25 @@ Puis, par vague : crée un worktree et une branche par tâche de `tasks.md` dont
 
 Au-delà de ~5 tâches parallèles, regroupe par lots : trop d'agents simultanés coûte cher pour peu de gain.
 
-### 5. Revue de code (Tech Lead + Sécurité, en parallèle)
+### 5 et 6. Revue de code et tests QA, en parallèle
+Lance le Tech Lead, la Sécurité et le QA **dans le même message** : ils examinent le même commit de la branche du sprint, et aucun ne modifie le code applicatif, donc ils ne se gênent pas. Note ce commit dans le journal et donne-le aux trois. Les corrections viennent ensuite, toutes ensemble, à l'étape 7.
+
+#### Revue de code (Tech Lead + Sécurité)
 Les deux relisent le diff de la branche du sprint depuis le commit de base, dans le worktree du sprint.
 - Tech Lead : revue de conformité à l'architecture, qualité, lisibilité → `review.md`.
 - Sécurité : revue du code produit (injections, secrets, authz, dépendances) → `security.md` (section *Revue du code*).
 
 Chaque remarque est classée **bloquant** / **à corriger** / **suggestion**.
 
-### 6. Tests QA
+#### Tests QA
 Le QA travaille dans le worktree du sprint, donc sur le code réellement intégré. Il écrit et **exécute** des tests (automatisés quand le projet le permet, sinon vérifications manuelles décrites pas à pas) contre chaque critère d'acceptation, plus des cas limites. Il consigne les bugs dans `qa-report.md` avec sévérité et étapes de reproduction.
 
 ### 7. Boucle de correction (max 3 tours)
-S'il reste des remarques **bloquantes** ou **à corriger** (revue, sécurité) ou des bugs QA de sévérité haute/moyenne : relance les devs concernés avec la liste précise des points à traiter, chacun dans un nouveau worktree de correction, puis fais intégrer et refais revue + QA **uniquement sur ce qui a changé** depuis le dernier commit revu. Arrête au bout de 3 tours même s'il reste des points : ils iront dans le rapport comme dette connue. Ce plafond évite qu'une équipe tourne en rond sur un problème qui demande en réalité une décision du client.
+**Ce qui déclenche un tour** : une remarque **bloquante** ou **à corriger** (revue, sécurité), ou un bug QA de sévérité haute ou moyenne. Sur un **petit sprint** (une seule tâche de dev), seuls un point **bloquant** ou un bug de sévérité **haute** déclenchent un tour : le reste va directement en dette, dans le rapport. Une suggestion ou un bug bas ne déclenche jamais de tour.
+
+**Un tour** : relance les devs concernés avec la liste précise des points à traiter, chacun dans un nouveau worktree de correction, puis fais intégrer. Ensuite, **seuls les rôles qui ont ouvert des points** vérifient les corrections, en parallèle, et **uniquement sur ce qui a changé** depuis le dernier commit revu : le Tech Lead si `review.md` a des points ouverts, la Sécurité si `security.md` en a, le QA s'il a signalé des bugs (il relance aussi la suite de tests pour la non-régression). Un rôle sans point ouvert n'est pas relancé. La contre-revue du Tech Lead se fait en `sonnet` : vérifier qu'un point est corrigé ne demande pas `opus`.
+
+Arrête au bout de 3 tours même s'il reste des points : ils iront dans le rapport comme dette connue. Ce plafond évite qu'une équipe tourne en rond sur un problème qui demande en réalité une décision du client.
 
 ### 8. Sprint review (PO), rapport et livraison
 Le PO vérifie chaque user story contre ses critères d'acceptation (à partir du rapport QA et du code) et la marque *Acceptée* / *Refusée* / *Partielle*. Ensuite, toi, tu écris `.societe/sprint-<N>/sprint-report.md` (gabarit dans `templates.md`).
@@ -122,3 +129,4 @@ Présente enfin au client un résumé court : ce qui est livré, le lien de la P
 - **Traçabilité** : tout passe par les fichiers du dossier de sprint. Si tu dois relayer une info d'un agent à l'autre, écris-la dans un fichier plutôt que de la recopier dans un prompt.
 - **Ton rôle à toi** : lancer les bons agents au bon moment, vérifier que chaque livrable existe et est utilisable avant de passer à l'étape suivante (sinon relance l'agent avec une consigne plus précise), et tenir le client informé en une ligne à chaque changement de phase.
 - **Taille d'équipe adaptée** : pour un petit besoin (un bug, une petite fonctionnalité), une seule tâche de dev, un QA, revue Tech Lead + Sécurité en une passe suffisent. Ne mobilise pas six agents pour corriger une faute de frappe — dans ce cas, dis-le au client et fais la correction directement. Avec une seule tâche, le dev peut travailler directement dans le worktree du sprint : pas besoin de branche de tâche ni d'intégration.
+- **Qualité proportionnée** : le niveau d'exigence suit la taille et l'usage du besoin, fixés par le PO dans la *Definition of Done*. Un outil personnel n'a pas besoin des protections d'un service en production : pas de plafonds, de cas extrêmes ni de durcissements que personne n'a demandés. Si un agent en ajoute ou en réclame, renvoie-le à la Definition of Done. C'est ce qui garde un petit sprint court et peu coûteux.
